@@ -14,7 +14,6 @@ if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
 	<title>My Tasks</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
 	<input type="checkbox" id="checkbox">
@@ -23,7 +22,7 @@ if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
 		<?php include "inc/nav.php" ?>
 		<section class="section-1">
 			<h4 class="title">My Tasks</h4>
-			<?php if (isset($_GET['success'])) {?>
+			<?php if (isset($_GET['success'])) { ?>
       	  	<div class="success" role="alert">
 			  <?php echo stripcslashes($_GET['success']); ?>
 			</div>
@@ -38,39 +37,42 @@ if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
 					<th>Due Date</th>
 					<th>Action</th>
 				</tr>
-				<?php $i=0; foreach ($tasks as $task) { ?>
+				<?php 
+                $i = 0; 
+                foreach ($tasks as $task) { 
+                    $currentDate = date('Y-m-d'); // Get the current date
+                ?>
 				<tr>
-					<td><?=++$i?></td>
-					<td><?=$task['title']?></td>
-					<td><?=$task['description']?></td>
-					<td><?=$task['status']?></td>
-	            <td><?=$task['due_date']?></td>
-
+					<td><?= ++$i ?></td>
+					<td><?= htmlspecialchars($task['title']) ?></td>
+					<td><?= htmlspecialchars($task['description']) ?></td>
+					<td><?= htmlspecialchars($task['status']) ?></td>
+	                <td><?= htmlspecialchars($task['due_date']) ?></td>
 					<td>
-						<a href="edit-task-employee.php?id=<?=$task['id']?>" class="edit-btn">Edit</a>
+						<?php if ($task['due_date'] >= $currentDate) { ?>
+							<a href="edit-task-employee.php?id=<?= $task['id'] ?>" class="edit-btn">Edit</a>
+						<?php } ?>
 					</td>
 				</tr>
-			   <?php	} ?>
+			   <?php } ?>
 			</table>
-		<?php }else { ?>
+		<?php } else { ?>
 			<h3>Empty</h3>
-		<?php  }?>
-			
+		<?php } ?>
 		</section>
 	</div>
 
 <script type="text/javascript">
 	var active = document.querySelector("#navList li:nth-child(2)");
 	active.classList.add("active");
-
-
 </script>
 
 </body>
 </html>
-<?php }else{ 
+<?php 
+} else { 
    $em = "First login";
    header("Location: login.php?error=$em");
    exit();
 }
- ?>
+?>
